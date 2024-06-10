@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <font
+        android:font="@font/karla_regular"
+        tools:targetApi="o" />
+    <font
+        android:font="@font/karla_light"
+        tools:targetApi="o" />
+    <font
+        android:font="@font/karla_medium"
+        tools:targetApi="o" />
+    <font
+        android:font="@font/karla_semibold"
+        tools:targetApi="o" />
+    <font
+        android:font="@font/karla_bold"
+        tools:targetApi="o" />
+</font-family>

@@ -1,0 +1,7 @@
+Done :
+Slicing Figma Design
+
+Minus :
+- Custom Sound Wave / Voice
+- Hardcoded String and Color
+- Ui lain add post, guide / panduan dan setting Not Done

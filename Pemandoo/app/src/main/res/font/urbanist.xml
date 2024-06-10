@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <font
+        android:font="@font/urbanist_regular"
+        tools:targetApi="o" />
+    <font
+        android:font="@font/urbanist_light"
+        tools:targetApi="o" />
+    <font
+        android:font="@font/urbanist_medium"
+        tools:targetApi="o" />
+    <font
+        android:font="@font/urbanist_semibold"
+        tools:targetApi="o" />
+    <font
+        android:font="@font/urbanist_bold"
+        tools:targetApi="o" />
+</font-family>

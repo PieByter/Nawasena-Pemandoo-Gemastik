@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.navigation.NavigationFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_play_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="17dp"
+                    android:layout_marginBottom="-25dp"
+                    android:backgroundTint="@color/white"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
+                    app:layout_constraintBottom_toTopOf="@id/iv_bottom_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/iv_landmark_image"
+                            android:layout_width="47dp"
+                            android:layout_height="47dp"
+                            android:layout_marginStart="14dp"
+                            android:layout_marginTop="19dp"
+                            android:src="@drawable/ic_image"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_landmark_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:fontFamily="@font/karla_medium"
+                            android:text="Tjong A Fie"
+                            android:textSize="14dp"
+                            app:layout_constraintStart_toEndOf="@id/iv_landmark_image"
+                            app:layout_constraintTop_toTopOf="@id/iv_landmark_image"
+                            app:layout_goneMarginTop="7dp"
+                            tools:ignore="TextSizeCheck" />
+
+
+                        <TextView
+                            android:id="@+id/tv_landmark_range"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/karla_medium"
+                            android:text="500 m"
+                            android:textSize="12dp"
+                            app:layout_constraintStart_toStartOf="@id/tv_landmark_name"
+                            app:layout_constraintTop_toBottomOf="@id/tv_landmark_name"
+                            app:layout_goneMarginTop="3dp"
+                            tools:ignore="TextSizeCheck" />
+
+                        <TextView
+                            android:id="@+id/tv_landmark_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="14dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="12dp"
+                            android:fontFamily="@font/karla_bold"
+                            android:text="Mulai mendengarkan tur audio Tjong A Fie mulai dari sejarah hingga perkmbangannya saat ini."
+                            android:textColor="#666666"
+                            android:textSize="12dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/iv_landmark_image"
+                            tools:ignore="TextSizeCheck" />
+
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/btn_play"
+                            android:layout_width="31dp"
+                            android:layout_height="36dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="@color/transparent"
+                            android:contentDescription="Play Sound Button"
+                            android:src="@drawable/ic_play"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="TouchTargetSizeCheck" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <ImageView
+                    android:id="@+id/iv_bottom_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pemandoo_bottom_logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_search_tour"
+            android:layout_width="match_parent"
+            android:layout_height="179dp"
+            android:layout_marginBottom="194dp"
+            android:backgroundTint="@color/primary_yellow"
+            app:cardCornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_search_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="23dp"
+                    android:fontFamily="@font/karla_bold"
+                    android:text="Mulai Tur Audio wisatamu sekarang"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/btn_panduan"
+                    android:layout_width="54dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="88dp"
+                    android:layout_marginTop="31dp"
+                    android:background="@drawable/button_fragment_bg"
+                    android:contentDescription="Panduan Button"
+                    android:src="@drawable/ic_book"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_title" />
+
+                <TextView
+                    android:id="@+id/tv_panduan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/karla_medium"
+                    android:text="Panduan"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="@id/btn_panduan"
+                    app:layout_constraintStart_toStartOf="@id/btn_panduan"
+                    app:layout_constraintTop_toBottomOf="@id/btn_panduan"
+                    tools:ignore="TextSizeCheck" />
+
+                <ImageButton
+                    android:id="@+id/btn_tambah"
+                    android:layout_width="54dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/button_fragment_bg"
+                    android:contentDescription="Tambah Button"
+                    android:src="@drawable/ic_add"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/btn_panduan" />
+
+                <TextView
+                    android:id="@+id/tv_tambah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/karla_medium"
+                    android:text="Tambah"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="@id/btn_tambah"
+                    app:layout_constraintStart_toStartOf="@id/btn_tambah"
+                    app:layout_constraintTop_toTopOf="@id/tv_panduan"
+                    tools:ignore="TextSizeCheck" />
+
+                <ImageButton
+                    android:id="@+id/btn_pengaturan"
+                    android:layout_width="54dp"
+                    android:layout_height="52dp"
+                    android:layout_marginEnd="88dp"
+                    android:background="@drawable/button_fragment_bg"
+                    android:contentDescription="Pengaturan Button"
+                    android:src="@drawable/ic_setting"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/btn_panduan" />
+
+                <TextView
+                    android:id="@+id/tv_pengaturan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/karla_medium"
+                    android:text="Pengaturan"
+                    android:textSize="14dp"
+                    app:layout_constraintEnd_toEndOf="@id/btn_pengaturan"
+                    app:layout_constraintStart_toStartOf="@id/btn_pengaturan"
+                    app:layout_constraintTop_toTopOf="@id/tv_panduan"
+                    tools:ignore="TextSizeCheck" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

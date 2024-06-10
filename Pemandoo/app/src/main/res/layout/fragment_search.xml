@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.search.SearchFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_search_tour_loading"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/loading_bar"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    app:indicatorColor="#2D2D2D"
+                    app:trackColor="#D9D9D9"
+                    android:layout_marginBottom="25dp"
+                    app:layout_constraintBottom_toTopOf="@id/tv_loading_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_loading_text"
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-25dp"
+                    android:fontFamily="@font/karla_bold"
+                    android:text="Menemukan tempat wisata di sekitar, mohon tunggu ya.."
+                    android:textColor="@color/common_grey"
+                    android:textSize="14dp"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toTopOf="@id/iv_bottom_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:ignore="TextSizeCheck" />
+
+                <ImageView
+                    android:id="@+id/iv_bottom_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pemandoo_bottom_logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_search_tour"
+            android:layout_width="match_parent"
+            android:layout_height="179dp"
+            android:layout_marginBottom="194dp"
+            android:backgroundTint="@color/primary_yellow"
+            app:cardCornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_search_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="23dp"
+                    android:fontFamily="@font/karla_bold"
+                    android:text="Mulai Tur Audio wisatamu sekarang"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_search_description1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="19dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/karla_regular"
+                    android:text="Dengarkan informasi terkait tempat-tempat wisata terdekat dari lokasimu saat ini hanya dengan satu klik. "
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_title" />
+
+                <TextView
+                    android:id="@+id/tv_search_description2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="19dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/karla_regular"
+                    android:text="Mulailah dengan memilih tempat wisata yang tersedia pada daftar dibawah ini. "
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_description1" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_search_start"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_marginVertical="12dp"
+                    android:layout_marginEnd="23dp"
+                    android:backgroundTint="@color/primary_green"
+                    android:fontFamily="@font/karla_regular"
+                    android:padding="0dp"
+                    android:text="Mengerti"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="14dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_search_description2"
+                    tools:ignore="TextSizeCheck,TouchTargetSizeCheck" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
