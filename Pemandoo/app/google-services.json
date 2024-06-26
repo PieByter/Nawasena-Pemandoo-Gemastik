@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "805788961919",
+    "project_id": "pemandoo",
+    "storage_bucket": "pemandoo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805788961919:android:a839136b99a25337d4c34a",
+        "android_client_info": {
+          "package_name": "com.nawasena.pemandoo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805788961919-4ri4op8ltj5inbva406pqh0t177rbknv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nawasena.pemandoo",
+            "certificate_hash": "ffdd2d8863f2ac694bc52b8148a99ff2ffd063fa"
+          }
+        },
+        {
+          "client_id": "805788961919-mu66uqeokerchsig84l9gr7tb31gigca.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaqLDBf8ZSaKb4lBLfzgsbjLpqFmKqCUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805788961919-mu66uqeokerchsig84l9gr7tb31gigca.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -10,6 +10,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <application
         android:allowBackup="true"
@@ -28,14 +32,20 @@
             android:name=".GuideActivity"
             android:exported="false" />
         <activity
-            android:name=".AddLandmarkActivity"
+            android:name=".database.AddLandmarkActivity"
             android:exported="false" />
         <activity
             android:name=".SettingActivity"
             android:exported="false" />
         <activity
             android:name=".OnBoardingActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".RegisterActivity"
             android:exported="true" />
@@ -45,12 +55,18 @@
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -60,10 +76,20 @@
             android:name=".MainActivity"
             android:exported="true" />
         <activity
-            android:name=".MapsActivity"
-            android:exported="true" />
+            android:name=".database.MapsActivity"
+            android:exported="true">
 
-        <receiver android:name=".GeofenceBroadcastReceiver" />
+        </activity>
+
+        <receiver
+            android:name=".database.GeofenceBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.dicoding.mygeofence.ACTION_GEOFENCE_EVENT" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

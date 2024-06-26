@@ -3,6 +3,7 @@ package com.nawasena.pemandoo
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.nawasena.pemandoo.database.MapsActivity
 import com.nawasena.pemandoo.databinding.ActivityOnboardingBinding
 
 class OnBoardingActivity : AppCompatActivity() {

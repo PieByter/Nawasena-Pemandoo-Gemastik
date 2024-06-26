@@ -64,7 +64,6 @@
                             app:layout_goneMarginTop="7dp"
                             tools:ignore="TextSizeCheck" />
 
-
                         <TextView
                             android:id="@+id/tv_landmark_range"
                             android:layout_width="wrap_content"

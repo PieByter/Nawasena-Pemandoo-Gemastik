@@ -67,7 +67,7 @@
                 android:fontFamily="@font/urbanist_medium"
                 android:hint="Username"
                 android:inputType="textShortMessage"
-                android:textColor="@color/grey"
+
                 android:textColorHint="#616161"
                 app:errorEnabled="true"
                 tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
@@ -96,7 +96,6 @@
                 android:fontFamily="@font/urbanist_medium"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/grey"
                 android:textColorHint="#616161"
                 app:errorEnabled="true"
                 tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
@@ -126,7 +125,6 @@
                 android:fontFamily="@font/urbanist_medium"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:textColor="@color/grey"
                 android:textColorHint="#616161"
                 app:errorEnabled="true"
                 tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
@@ -156,7 +154,6 @@
                 android:fontFamily="@font/urbanist_medium"
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
-                android:textColor="@color/grey"
                 android:textColorHint="#616161"
                 app:errorEnabled="true"
                 tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />

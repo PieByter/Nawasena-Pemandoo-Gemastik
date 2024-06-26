@@ -17,7 +17,7 @@ class SearchFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
@@ -35,7 +35,6 @@ class SearchFragment : Fragment() {
 
     private fun startLoading() {
         binding.loadingBar.visibility = View.VISIBLE
-        binding.loadingBar.show()
 
         Handler(Looper.getMainLooper()).postDelayed({
             stopLoading()
@@ -43,8 +42,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun stopLoading() {
-        binding.loadingBar.hide()
-/*        binding.loadingBar.visibility = View.GONE*/
+        _binding?.loadingBar?.visibility = View.GONE
     }
 
     private fun onStartTour() {

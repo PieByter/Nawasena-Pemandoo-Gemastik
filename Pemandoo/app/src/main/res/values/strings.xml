@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Pemandoo</string>
+    <string name="test_description">
+        Tjong A Fie House is a two-storey house on Jalan Ahmad Yani in Kesawan, Medan, North Sumatra,
+        built by Tjong A Fie (1860-1921), a Hakka merchant who owned many plantation lands in Medan.
+        However, since 2009 parts of the house have been open for public visits. The house was completed in 1900 and
+        designed with Chinese, European, Malay and art-deco architectural styles and became a historical tourist attraction in Medan.
+        In this house, visitors can learn about the history of Tjong A Fie\'s life through photographs, paintings and furniture used by his family.
+        furniture used by his family and learn about Malay-Chinese culture.
+        Tjong A Fie was related to Cheong Fatt Tze who built Cheong Fatt Tze Mansion in Penang, Malaysia.
+        At first glance, there are similarities between Tjong A Fie House and Cheong Fatt Tze Mansion.
+        This museum has been included in one of the cultural heritage protected by the Ministry of Education and Culture of the Republic of Indonesia.
+        Therefore, there are many sources of information on the history and culture of the Chinese population in Medan, North Sumatra.
+    </string>
+    <string name="web_client_id">805788961919-mu66uqeokerchsig84l9gr7tb31gigca.apps.googleusercontent.com</string>
 </resources>

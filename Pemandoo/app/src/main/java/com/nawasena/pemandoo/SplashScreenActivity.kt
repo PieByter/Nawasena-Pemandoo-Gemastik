@@ -18,7 +18,6 @@ class SplashScreenActivity : AppCompatActivity() {
 
         val logoImageView: ImageView = findViewById(R.id.iv_logo_splash_screen)
 
-        // Create the animation
         logoImageView.alpha = 0f
         logoImageView.scaleX = 0f
         logoImageView.scaleY = 0f
@@ -33,7 +32,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     startActivity(Intent(this, OnBoardingActivity::class.java))
                     finish()
-                }, 1000) // Delay to start main activity
+                }, 1000)
             }
             .start()
     }
