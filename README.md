@@ -8,8 +8,8 @@
 |2   | Pieter Tanoto        | 211401015   | Member      |
 |3   | Habel Febrian Sitanggang       | 211401073   | Member      |
 
-UNIVERSITAS SUMATERA UTARA
-Tahun 2024
+### UNIVERSITAS SUMATERA UTARA
+### Tahun 2024
 ### Dosen Pembimbing: Fuzy Yustika Manik S.Kom., M.Kom (198710152019032010)
 
 ## Daftar Isi
