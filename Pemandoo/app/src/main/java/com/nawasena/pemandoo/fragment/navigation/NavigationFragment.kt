@@ -12,18 +12,24 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import com.nawasena.pemandoo.GuideActivity
 import com.nawasena.pemandoo.R
 import com.nawasena.pemandoo.SettingActivity
 import com.nawasena.pemandoo.database.AddLandmarkActivity
+import com.nawasena.pemandoo.database.AppDatabase
+import com.nawasena.pemandoo.database.LandmarkRepository
+import com.nawasena.pemandoo.database.MapsViewModel
+import com.nawasena.pemandoo.database.MapsViewModelFactory
 import com.nawasena.pemandoo.databinding.FragmentNavigationBinding
-import com.nawasena.pemandoo.database.*
+import kotlinx.coroutines.launch
 
 class NavigationFragment : Fragment() {
     private var _binding: FragmentNavigationBinding? = null
@@ -34,6 +40,9 @@ class NavigationFragment : Fragment() {
     private lateinit var locationCallback: LocationCallback
 
     private lateinit var viewModel: MapsViewModel
+
+    private val geofenceRadius = 100f
+    private var geofenceLocations: List<LatLng> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +62,7 @@ class NavigationFragment : Fragment() {
                 super.onLocationResult(locationResult)
                 locationResult.lastLocation?.let { newLocation ->
                     userLocation = newLocation
+                    checkGeofenceStatus()
                 }
             }
         }
@@ -75,12 +85,10 @@ class NavigationFragment : Fragment() {
             requestLocation()
         }
 
-        binding.btnPlay.setOnClickListener {
-            val landmarkId = 0
-            val actionId = R.id.action_navigationFragment_to_resultFragment
-            findNavController().navigate(actionId, Bundle().apply {
-                putInt("landmarkId", landmarkId)
-            })
+        lifecycleScope.launch {
+            val landmarks = viewModel.getAllLandmarksWithDetails()
+            geofenceLocations = landmarks.map { LatLng(it.latitude, it.longitude) }
+            checkGeofenceStatus()
         }
 
         binding.btnPanduan.setOnClickListener {
@@ -122,6 +130,35 @@ class NavigationFragment : Fragment() {
             locationCallback,
             null
         )
+    }
+
+    private fun checkGeofenceStatus() {
+        val withinGeofence = userLocation?.let { location ->
+            geofenceLocations.any { geofence ->
+                val distance = FloatArray(1)
+                Location.distanceBetween(
+                    location.latitude, location.longitude,
+                    geofence.latitude, geofence.longitude,
+                    distance
+                )
+                distance[0] <= geofenceRadius
+            }
+        } ?: false
+
+        binding.btnPlay.isEnabled = withinGeofence
+        binding.btnPlay.visibility = if (withinGeofence) View.VISIBLE else View.GONE
+
+        if (withinGeofence) {
+            binding.btnPlay.setOnClickListener {
+                val landmarkId = 0
+                val actionId = R.id.action_navigationFragment_to_resultFragment
+                findNavController().navigate(actionId, Bundle().apply {
+                    putInt("landmarkId", landmarkId)
+                })
+            }
+        } else {
+            binding.btnPlay.setOnClickListener(null)
+        }
     }
 
     companion object {

@@ -6,13 +6,240 @@
     android:layout_height="match_parent"
     tools:context=".SettingActivity">
 
-    <Button
-        android:id="@+id/signOutButton"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_back_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:background="@color/transparent"
+        android:text="Setting"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_green"
+        android:textSize="28sp"
+        app:icon="@drawable/ic_back_profile"
+        app:iconTint="@color/primary_green"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Log Out"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/profile_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="35dp"
+        android:backgroundTint="@color/primary_yellow"
+        app:cardCornerRadius="18dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_back_profile">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:padding="24dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_avatar"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/ic_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ImageContrastCheck"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="10dp"
+                android:text="Username"
+                android:textSize="24sp"
+                app:layout_constraintStart_toEndOf="@id/image_avatar"
+                app:layout_constraintTop_toTopOf="@id/image_avatar" />
+
+            <ImageView
+                android:id="@+id/image_email"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/ic_email"
+                app:layout_constraintStart_toStartOf="@id/text_name"
+                app:layout_constraintTop_toBottomOf="@id/text_name"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/image_avatar"
+                android:layout_marginStart="8dp"
+                android:gravity="center_horizontal"
+                android:text="Email@gmail.com"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/image_email"
+                app:layout_constraintStart_toEndOf="@id/image_email"
+                app:layout_constraintTop_toTopOf="@id/image_email"
+                tools:ignore="TextContrastCheck" />
+
+            <ImageView
+                android:id="@+id/image_date_joined"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/ic_date"
+                app:layout_constraintStart_toStartOf="@id/image_email"
+                app:layout_constraintTop_toBottomOf="@id/image_email"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_date_joined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="center_horizontal"
+                android:text="Join Dated"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/image_date_joined"
+                app:layout_constraintStart_toEndOf="@id/image_date_joined"
+                app:layout_constraintTop_toTopOf="@id/image_date_joined"
+                tools:ignore="TextContrastCheck" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17dp"
+                android:backgroundTint="@color/primary_green"
+                android:paddingVertical="16dp"
+                android:text="Edit Profile"
+                android:textAllCaps="false"
+                android:textColor="@color/primary_yellow"
+                android:textSize="16sp"
+                app:cornerRadius="40dp"
+                app:icon="@drawable/ic_edit_profile"
+                app:iconGravity="textStart"
+                app:iconTint="@color/primary_yellow"
+                app:layout_constraintEnd_toEndOf="@id/divider_guest"
+                app:layout_constraintStart_toStartOf="@id/divider_guest"
+                app:layout_constraintTop_toBottomOf="@id/image_avatar"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <View
+                android:id="@+id/divider_guest"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+
+                android:layout_marginTop="17dp"
+                android:background="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_edit_profile" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="-16dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/transparent"
+                android:text="Language"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_localize"
+                app:iconSize="32dp"
+                app:iconTint="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider_guest"
+                tools:ignore="TextSizeCheck" />
+
+            <TextView
+                android:id="@+id/tv_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:text="en"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/btn_language"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/btn_language"
+                tools:ignore="TextContrastCheck" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_reset_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="Reset Password"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_reset_pass"
+                app:iconSize="28dp"
+                app:iconTint="@color/black"
+                app:layout_constraintStart_toStartOf="@id/btn_language"
+                app:layout_constraintTop_toBottomOf="@id/btn_language"
+                tools:ignore="TextSizeCheck" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_about_us"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:text="About Us"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:icon="@drawable/pemandoo_bottom_logo"
+                app:iconSize="28dp"
+                app:iconTint="@color/black"
+                app:layout_constraintStart_toStartOf="@id/btn_language"
+                app:layout_constraintTop_toBottomOf="@id/btn_reset_password"
+                tools:ignore="TextSizeCheck" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signOutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:background="@color/transparent"
+                android:text="Logout"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:icon="@drawable/ic_logout"
+                app:iconSize="28dp"
+                app:iconTint="@color/black"
+                app:layout_constraintStart_toStartOf="@id/btn_language"
+                app:layout_constraintTop_toBottomOf="@id/btn_about_us"
+                tools:ignore="TextSizeCheck" />
+
+            <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <TextView
+        android:id="@+id/text_copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="64dp"
+        android:text="2024 © Pemandoo \nAll Rights Reserved"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_card_view" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

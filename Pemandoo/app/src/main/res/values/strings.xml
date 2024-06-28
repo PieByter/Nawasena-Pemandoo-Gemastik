@@ -13,4 +13,7 @@
         Therefore, there are many sources of information on the history and culture of the Chinese population in Medan, North Sumatra.
     </string>
     <string name="web_client_id">805788961919-mu66uqeokerchsig84l9gr7tb31gigca.apps.googleusercontent.com</string>
+    <string name="find_place">Menemukan tempat wisata di sekitar, mohon tunggu ya..</string>
+    <string name="find_place_done">"Kami menemukan beberapa destinasi wisata terdekat"</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

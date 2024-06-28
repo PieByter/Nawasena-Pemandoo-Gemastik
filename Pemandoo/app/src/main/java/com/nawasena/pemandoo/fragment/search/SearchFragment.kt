@@ -35,6 +35,7 @@ class SearchFragment : Fragment() {
 
     private fun startLoading() {
         binding.loadingBar.visibility = View.VISIBLE
+        binding.tvLoadingText.text = getString(R.string.find_place)
 
         Handler(Looper.getMainLooper()).postDelayed({
             stopLoading()
@@ -42,7 +43,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun stopLoading() {
-        _binding?.loadingBar?.visibility = View.GONE
+        _binding?.let {
+            it.loadingBar.visibility = View.GONE
+            it.tvLoadingText.text = getString(R.string.find_place_done)
+        }
     }
 
     private fun onStartTour() {

@@ -30,5 +30,14 @@
         <action
             android:id="@+id/action_resultFragment_to_navigationFragment"
             app:destination="@id/navigationFragment" />
+        <action
+            android:id="@+id/action_resultFragment_to_detailLandmarkFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.nawasena.pemandoo.DetailLandmarkFragment"
+        tools:layout="@layout/fragment_detail_landmark"/>
+
 </navigation>

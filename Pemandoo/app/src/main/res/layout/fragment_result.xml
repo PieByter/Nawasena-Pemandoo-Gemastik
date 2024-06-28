@@ -100,7 +100,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_play_description"
             android:layout_width="match_parent"
@@ -122,9 +121,10 @@
                     android:id="@+id/iv_landmark_image"
                     android:layout_width="47dp"
                     android:layout_height="47dp"
+                    android:transitionName="image_transition"
                     android:layout_marginStart="14dp"
                     android:layout_marginTop="19dp"
-                    android:src="@drawable/ic_image"
+                    android:src="@drawable/tjong_a_fie"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -136,6 +136,7 @@
                     android:fontFamily="@font/karla_medium"
                     android:text="Tjong A Fie"
                     android:textSize="14sp"
+                    android:transitionName="name_transition"
                     app:layout_constraintStart_toEndOf="@id/iv_landmark_image"
                     app:layout_constraintTop_toTopOf="@id/iv_landmark_image"
                     app:layout_goneMarginTop="7dp"
@@ -149,6 +150,7 @@
                     android:fontFamily="@font/karla_medium"
                     android:text="500 m"
                     android:textSize="12sp"
+                    android:transitionName="radius_transition"
                     app:layout_constraintStart_toStartOf="@id/tv_landmark_name"
                     app:layout_constraintTop_toBottomOf="@id/tv_landmark_name"
                     app:layout_goneMarginTop="3dp"
@@ -166,6 +168,7 @@
                     android:maxLines="4"
                     android:text="Mulai mendengarkan tur audio Tjong A Fie mulai dari sejarah hingga perkmbangannya saat ini."
                     android:textColor="#666666"
+                    android:transitionName="description_transition"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

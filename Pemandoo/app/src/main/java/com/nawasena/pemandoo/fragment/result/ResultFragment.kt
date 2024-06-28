@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
+import com.bumptech.glide.Glide
 import com.nawasena.pemandoo.R
 import com.nawasena.pemandoo.database.AppDatabase
 import com.nawasena.pemandoo.database.LandmarkRepository
@@ -55,6 +57,11 @@ class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
         viewModel.getLandmarkById(landmarkId).observe(viewLifecycleOwner) { landmark ->
             landmark?.let {
                 binding.tvLandmarkDescription.text = it.description
+                binding.tvLandmarkName.text = it.name
+                binding.tvLandmarkRange.text = it.geofenceRadius.toString()
+                Glide.with(this)
+                    .load(it.image)
+                    .into(binding.ivLandmarkImage)
 
                 viewModel.updateCurrentLandmark(it)
 
@@ -63,6 +70,30 @@ class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
                 if (isPlaying) {
                     speakDescription(it.description)
                 }
+
+                binding.cvPlayDescription.setOnClickListener { _ ->
+                    val bundle = Bundle().apply {
+                        putString("name", it.name)
+                        putString("radius", it.geofenceRadius.toString())
+                        putString("image", it.image)
+                        putString("description", it.description)
+                    }
+
+                    val extras = FragmentNavigatorExtras(
+                        binding.ivLandmarkImage to "image_transition",
+                        binding.tvLandmarkName to "name_transition",
+                        binding.tvLandmarkRange to "radius_transition",
+                        binding.tvLandmarkDescription to "description_transition"
+                    )
+
+                    findNavController().navigate(
+                        R.id.action_resultFragment_to_detailLandmarkFragment,
+                        bundle,
+                        null,
+                        extras
+                    )
+                }
+
             }
         }
         soundWaveAnimation = binding.ivSoundWave
@@ -121,7 +152,7 @@ class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
         if (status == TextToSpeech.SUCCESS) {
             val result = tts.setLanguage(Locale.US)
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Toast.makeText(requireContext(), "Bahasa tidak didukung", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Language not supported", Toast.LENGTH_SHORT).show()
                 Log.e("TTS", "The language is not supported")
             } else {
                 pendingDescription?.let {
@@ -130,7 +161,7 @@ class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
                 }
             }
         } else {
-            Toast.makeText(requireContext(), "Gagal menginisialisasi Text-to-Speech", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Failed to initialize Text-to-Speech", Toast.LENGTH_SHORT).show()
             Log.e("TTS", "Initialization failed with status: $status")
         }
     }

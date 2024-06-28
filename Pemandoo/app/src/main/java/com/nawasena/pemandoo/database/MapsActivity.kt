@@ -180,7 +180,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     name = "Tjong A Fie Museum",
                     latitude = 3.585609,
                     longitude = 98.680198,
-                    image = "sample_image_uri",
+                    image = "https://inspirasi.avonturin.id/wp-content/uploads/2023/04/Foto-Gambar-Museum-Tjong-A-Fie.Mansion-@np18_indonesia_ui-2.jpg",
                     description = description,
                     geofenceRadius = 100f
                 )
