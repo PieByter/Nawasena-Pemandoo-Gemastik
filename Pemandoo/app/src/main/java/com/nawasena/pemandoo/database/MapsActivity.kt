@@ -13,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
@@ -22,12 +21,14 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.nawasena.pemandoo.R
+import com.nawasena.pemandoo.api.ApiConfig
+import com.nawasena.pemandoo.api.LandmarkResponseItem
 import com.nawasena.pemandoo.databinding.ActivityMapsBinding
-import kotlinx.coroutines.launch
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -35,11 +36,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
     private lateinit var geofencingClient: GeofencingClient
     private lateinit var viewModel: MapsViewModel
-    private lateinit var repository: LandmarkRepository
+
+    // Set to track active geofence IDs
+    private val activeGeofenceIds = mutableSetOf<String>()
 
     private val geofencePendingIntent by lazy {
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
         intent.action = GeofenceBroadcastReceiver.ACTION_GEOFENCE_EVENT
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_MUTABLE)
         } else {
@@ -63,8 +67,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val database = AppDatabase.getDatabase(applicationContext)
-        repository = LandmarkRepository(database.landmarkDao())
+        val repository = MapsRepository(ApiConfig.apiService)
+        viewModel = ViewModelProvider(this, MapsViewModelFactory(repository))[MapsViewModel::class.java]
 
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
@@ -76,10 +80,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             getAllLandmarksAndDisplay()
         }
 
-        val factory = MapsViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[MapsViewModel::class.java]
-
-        testDatabaseOperations()
+        geofencingClient = LocationServices.getGeofencingClient(this)
     }
 
     private fun requestLocationPermission() {
@@ -90,8 +91,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        geofencingClient = LocationServices.getGeofencingClient(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -104,109 +103,109 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             mMap.isMyLocationEnabled = true
+            getAllLandmarksAndDisplay()
         } else {
             requestLocationPermission()
         }
     }
 
     private fun addGeofence(latLng: LatLng, radius: Float, geofenceId: String) {
-        val geofence = Geofence.Builder()
-            .setRequestId(geofenceId)
-            .setCircularRegion(latLng.latitude, latLng.longitude, radius)
-            .setExpirationDuration(Geofence.NEVER_EXPIRE)
-            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
-            .build()
-
-        val geofencingRequest = GeofencingRequest.Builder()
-            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-            .addGeofence(geofence)
-            .build()
-
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
-                .addOnSuccessListener {
-                    Log.d("MapsActivity", "Geofence added successfully: $geofenceId")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("MapsActivity", "Failed to add geofence: $geofenceId", e)
-                }
+            ) == PackageManager.PERMISSION_GRANTED) {
+
+            // Check if geofence with same ID is already active, remove it if true
+            if (activeGeofenceIds.contains(geofenceId)) {
+                removeGeofence(geofenceId)
+            }
+
+            val geofence = Geofence.Builder()
+                .setRequestId(geofenceId)
+                .setCircularRegion(latLng.latitude, latLng.longitude, radius)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build()
+
+            val geofencingRequest = GeofencingRequest.Builder()
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .addGeofence(geofence)
+                .build()
+
+            try {
+                geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)
+                    .addOnSuccessListener {
+                        Log.d("MapsActivity", "Geofence added successfully: $geofenceId")
+                        activeGeofenceIds.add(geofenceId)
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("MapsActivity", "Failed to add geofence: $geofenceId", e)
+                    }
+            } catch (securityException: SecurityException) {
+                Log.e("MapsActivity", "SecurityException: ${securityException.message}")
+                // Handle security exception (e.g., show error message to user)
+                Toast.makeText(this, "Failed to add geofence: SecurityException", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Handle case where permission is not granted
+            Toast.makeText(this, "Location permission is required to add geofence", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun removeGeofence(geofenceId: String) {
+        geofencingClient.removeGeofences(listOf(geofenceId))
+            .addOnSuccessListener {
+                Log.d("MapsActivity", "Geofence removed successfully: $geofenceId")
+                activeGeofenceIds.remove(geofenceId)
+            }
+            .addOnFailureListener { e ->
+                Log.e("MapsActivity", "Failed to remove geofence: $geofenceId", e)
+            }
     }
 
     private fun getAllLandmarksAndDisplay() {
-        lifecycleScope.launch {
-            try {
-                val landmarks = repository.getAllLandmarksWithDetails()
-                mMap.clear()
-                for (landmark in landmarks) {
-                    val latLng = LatLng(landmark.latitude, landmark.longitude)
-                    val radius = landmark.geofenceRadius
-
-                    val markerOptions = MarkerOptions().position(latLng).title(landmark.name)
-                    mMap.addMarker(markerOptions)
-
-                    val circleOptions = CircleOptions()
-                        .center(latLng)
-                        .radius(radius.toDouble())
-                        .strokeColor(Color.RED)
-                        .fillColor(0x220000FF)
-                        .strokeWidth(3f)
-                    mMap.addCircle(circleOptions)
-                    addGeofence(latLng, radius, landmark.id.toString())
-                }
-
-                if (landmarks.isNotEmpty()) {
-                    val firstLandmark = landmarks[0]
-                    val firstLatLng = LatLng(firstLandmark.latitude, firstLandmark.longitude)
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLatLng, 12f))
-                }
-            } catch (e: Exception) {
-                Log.e("MapsActivity", "Error fetching landmarks", e)
-                Toast.makeText(this@MapsActivity, "Error fetching landmarks", Toast.LENGTH_SHORT)
-                    .show()
+        viewModel.fetchAllLandmarks().observe(this) { landmarks ->
+            if (landmarks != null) {
+                Log.d("MapsActivity", "Successfully fetched ${landmarks.size} landmarks")
+                displayLandmarks(landmarks)
+            } else {
+                Log.e("MapsActivity", "Failed to fetch landmarks")
             }
         }
     }
 
-    private fun testDatabaseOperations() {
-        lifecycleScope.launch {
-            try {
-                val description = getString(R.string.test_description)
-                val landmark = Landmark(
-                    id = 0,
-                    name = "Tjong A Fie Museum",
-                    latitude = 3.585609,
-                    longitude = 98.680198,
-                    image = "https://inspirasi.avonturin.id/wp-content/uploads/2023/04/Foto-Gambar-Museum-Tjong-A-Fie.Mansion-@np18_indonesia_ui-2.jpg",
-                    description = description,
-                    geofenceRadius = 100f
-                )
-                viewModel.insert(landmark)
-                Log.d("MapsActivity", "Test landmark inserted")
+    private fun displayLandmarks(landmarks: List<LandmarkResponseItem>) {
+        mMap.clear()
+        // Clear activeGeofenceIds to start fresh
+        activeGeofenceIds.clear()
 
-                val allLandmarks = repository.getAllLandmarksWithDetails()
-                Log.d("MapsActivity", "All landmarks: $allLandmarks")
+        for (landmark in landmarks) {
+            val latLng = LatLng(
+                landmark.coordinates?.latitude as Double,
+                landmark.coordinates.longitude as Double
+            )
+            val radius = 100f
 
-                if (allLandmarks.isNotEmpty()) {
-                    val firstLandmark = allLandmarks[0]
-                    firstLandmark.name = "Tjong A Fie"
-                    viewModel.update(firstLandmark)
-                    Log.d("MapsActivity", "Test landmark updated")
-                }
+            val markerOptions = MarkerOptions().position(latLng).title(landmark.name).icon(
+                BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+            mMap.addMarker(markerOptions)
 
-                if (allLandmarks.isNotEmpty()) {
-                    val firstLandmark = allLandmarks[0]
-                    viewModel.delete(firstLandmark.id)
-                    Log.d("MapsActivity", "Test landmark deleted")
-                }
+            val circleOptions = CircleOptions()
+                .center(latLng)
+                .radius(radius.toDouble())
+                .strokeColor(Color.GREEN)
+                .fillColor(0x220A6847)
+                .strokeWidth(3f)
+            mMap.addCircle(circleOptions)
+            addGeofence(latLng, radius, landmark.id.toString())
+        }
 
-                getAllLandmarksAndDisplay()
-            } catch (e: Exception) {
-                Log.e("MapsActivity", "Error during test database operations", e)
-            }
+        if (landmarks.isNotEmpty()) {
+            val firstLandmark = landmarks[4]
+            val firstLatLng = LatLng(
+                firstLandmark.coordinates!!.latitude as Double,
+                firstLandmark.coordinates.longitude as Double
+            )
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLatLng, 12f))
         }
     }
 }

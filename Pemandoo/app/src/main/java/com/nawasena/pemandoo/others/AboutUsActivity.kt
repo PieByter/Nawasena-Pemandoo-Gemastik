@@ -1,7 +1,8 @@
-package com.nawasena.pemandoo
+package com.nawasena.pemandoo.others
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.nawasena.pemandoo.R
 
 class AboutUsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

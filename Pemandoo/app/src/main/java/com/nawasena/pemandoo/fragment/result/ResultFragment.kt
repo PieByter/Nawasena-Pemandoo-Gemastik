@@ -10,17 +10,14 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.nawasena.pemandoo.R
-import com.nawasena.pemandoo.database.AppDatabase
-import com.nawasena.pemandoo.database.LandmarkRepository
+import com.nawasena.pemandoo.api.LandmarkResponseItem
 import com.nawasena.pemandoo.database.MapsViewModel
-import com.nawasena.pemandoo.database.MapsViewModelFactory
 import com.nawasena.pemandoo.databinding.FragmentResultBinding
-import java.util.*
+import java.util.Locale
 
 class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
 
@@ -31,7 +28,6 @@ class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
     private lateinit var tts: TextToSpeech
     private var isPlaying: Boolean = false
     private var pendingDescription: String? = null
-
     private lateinit var soundWaveAnimation: LottieAnimationView
 
     override fun onCreateView(
@@ -45,60 +41,57 @@ class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val landmarkId = arguments?.getInt("landmarkId", 0) ?: 0
+        val landmarkId = arguments?.getString("landmarkId", "") ?: ""
 
-        val application = requireActivity().application
-        val dataSource = AppDatabase.getDatabase(application).landmarkDao()
-        val repository = LandmarkRepository(dataSource)
-        viewModel = ViewModelProvider(this, MapsViewModelFactory(repository))[MapsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[MapsViewModel::class.java]
 
         tts = TextToSpeech(requireContext(), this)
 
-        viewModel.getLandmarkById(landmarkId).observe(viewLifecycleOwner) { landmark ->
-            landmark?.let {
-                binding.tvLandmarkDescription.text = it.description
-                binding.tvLandmarkName.text = it.name
-                binding.tvLandmarkRange.text = it.geofenceRadius.toString()
-                Glide.with(this)
-                    .load(it.image)
-                    .into(binding.ivLandmarkImage)
-
-                viewModel.updateCurrentLandmark(it)
-
-                pendingDescription = it.description
-
-                if (isPlaying) {
-                    speakDescription(it.description)
-                }
-
-                binding.cvPlayDescription.setOnClickListener { _ ->
-                    val bundle = Bundle().apply {
-                        putString("name", it.name)
-                        putString("radius", it.geofenceRadius.toString())
-                        putString("image", it.image)
-                        putString("description", it.description)
-                    }
-
-                    val extras = FragmentNavigatorExtras(
-                        binding.ivLandmarkImage to "image_transition",
-                        binding.tvLandmarkName to "name_transition",
-                        binding.tvLandmarkRange to "radius_transition",
-                        binding.tvLandmarkDescription to "description_transition"
-                    )
-
-                    findNavController().navigate(
-                        R.id.action_resultFragment_to_detailLandmarkFragment,
-                        bundle,
-                        null,
-                        extras
-                    )
-                }
-
-            }
-        }
         soundWaveAnimation = binding.ivSoundWave
 
+        viewModel.getLandmarkById(landmarkId).observe(viewLifecycleOwner) { landmark ->
+            landmark?.let {
+                updateUI(landmark)
+            }
+        }
+
         setupButtons()
+    }
+
+    private fun updateUI(landmark: LandmarkResponseItem) {
+        binding.tvLandmarkName.text = landmark.name
+        binding.tvLandmarkDescription.text = landmark.description?.overview ?: ""
+        Glide.with(this)
+            .load(landmark.photo)
+            .into(binding.ivLandmarkImage)
+
+        binding.cvPlayDescription.setOnClickListener {
+            navigateToDetailFragment(landmark)
+        }
+
+        pendingDescription = landmark.description?.overview
+
+        // Automatically start TTS and update UI on first entry or from NavigationFragment
+        if (!isPlaying) {
+            isPlaying = true
+            speakDescription(pendingDescription ?: "")
+            soundWaveAnimation.playAnimation()
+            updatePauseButton()
+        }
+    }
+
+    private fun navigateToDetailFragment(landmark: LandmarkResponseItem) {
+        val bundle = Bundle().apply {
+            putString("name", landmark.name)
+            putString("radius", landmark.coordinates?.latitude.toString())
+            putString("image", landmark.photo)
+            putString("description", landmark.description?.overview)
+        }
+
+        findNavController().navigate(
+            R.id.action_resultFragment_to_detailLandmarkFragment,
+            bundle
+        )
     }
 
     private fun setupButtons() {
@@ -108,10 +101,10 @@ class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
                 soundWaveAnimation.pauseAnimation()
                 false
             } else {
-                viewModel.getCurrentLandmark()?.let { landmark ->
-                    speakDescription(landmark.description)
+                pendingDescription?.let {
+                    speakDescription(it)
+                    soundWaveAnimation.playAnimation()
                 }
-                soundWaveAnimation.playAnimation()
                 true
             }
             updatePauseButton()
@@ -124,9 +117,19 @@ class ResultFragment : Fragment(), TextToSpeech.OnInitListener {
 
     private fun speakDescription(description: String) {
         if (::tts.isInitialized) {
-            val result = tts.speak(description, TextToSpeech.QUEUE_FLUSH, null, null)
-            if (result == TextToSpeech.ERROR) {
-                Log.e("TTS", "Error in speaking the text")
+            val result = tts.setLanguage(Locale.US)
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(requireContext(), "Language not supported", Toast.LENGTH_SHORT).show()
+                Log.e("TTS", "The language is not supported")
+            } else {
+                if (description.isNotEmpty()) {
+                    val speakResult = tts.speak(description, TextToSpeech.QUEUE_FLUSH, null, null)
+                    if (speakResult == TextToSpeech.ERROR) {
+                        Log.e("TTS", "Error in speaking the text")
+                    }
+                } else {
+                    Log.e("TTS", "Description is empty or null")
+                }
             }
         } else {
             pendingDescription = description

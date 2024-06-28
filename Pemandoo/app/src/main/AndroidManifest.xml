@@ -28,13 +28,13 @@
         android:theme="@style/Theme.Pemandoo"
         tools:targetApi="31">
         <activity
-            android:name=".AboutUsActivity"
+            android:name=".others.AboutUsActivity"
             android:exported="false" />
         <activity
-            android:name=".ResetPasswordActivity"
+            android:name=".authentication.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgetPasswordActivity"
+            android:name=".authentication.ForgetPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".GuideActivity"
@@ -43,26 +43,26 @@
             android:name=".database.AddLandmarkActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".authentication.SettingActivity"
             android:exported="false" />
         <activity
-            android:name=".OnBoardingActivity"
-            android:exported="true">
-        </activity>
+            android:name=".authentication.OnBoardingActivity"
+            android:exported="true"></activity>
         <activity
-            android:name=".RegisterActivity"
+            android:name=".authentication.RegisterActivity"
             android:exported="true" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".authentication.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".others.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <provider
@@ -80,20 +80,10 @@
             android:value="AIzaSyB-urs2QtUTLaSbvkEYA23vb5K1bKT-e_g" />
 
         <activity
-            android:name=".MainActivity"
-            android:exported="true" />
-        <activity
             android:name=".database.MapsActivity"
-            android:exported="true" />
+            android:exported="true"></activity>
 
-        <receiver
-            android:name=".database.GeofenceBroadcastReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.dicoding.mygeofence.ACTION_GEOFENCE_EVENT" />
-            </intent-filter>
-        </receiver>
+        <receiver android:name=".database.GeofenceBroadcastReceiver" />
     </application>
 
 </manifest>

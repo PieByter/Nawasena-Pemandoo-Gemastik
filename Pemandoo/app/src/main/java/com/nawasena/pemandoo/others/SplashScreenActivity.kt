@@ -1,4 +1,4 @@
-package com.nawasena.pemandoo
+package com.nawasena.pemandoo.others
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.os.Looper
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.nawasena.pemandoo.R
+import com.nawasena.pemandoo.authentication.OnBoardingActivity
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {

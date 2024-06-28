@@ -1,4 +1,4 @@
-package com.nawasena.pemandoo
+package com.nawasena.pemandoo.authentication
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
+import com.nawasena.pemandoo.R
 import com.nawasena.pemandoo.database.MapsActivity
 import com.nawasena.pemandoo.databinding.ActivityLoginBinding
 

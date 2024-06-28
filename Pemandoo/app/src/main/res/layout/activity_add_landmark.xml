@@ -75,6 +75,41 @@
             android:minHeight="48dp" />
 
         <EditText
+            android:id="@+id/editTextArchitecturalFeatures"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Architectural Features"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/editTextInterestingFacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Interesting Facts"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/editTextHistoricalSignificance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Historical Significance"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/editTextHours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Visitor Hours"
+            android:minHeight="48dp" />
+
+        <EditText
+            android:id="@+id/editTextEntryFee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Entry Fee"
+            android:minHeight="48dp" />
+
+        <EditText
             android:id="@+id/editTextGeofenceRadius"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

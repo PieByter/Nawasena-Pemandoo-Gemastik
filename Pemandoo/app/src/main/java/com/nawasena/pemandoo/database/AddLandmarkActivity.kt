@@ -11,6 +11,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.nawasena.pemandoo.api.ApiConfig
+import com.nawasena.pemandoo.api.Coordinates
+import com.nawasena.pemandoo.api.Description
+import com.nawasena.pemandoo.api.LandmarkResponseItem
+import com.nawasena.pemandoo.api.VisitorInformation
 import com.nawasena.pemandoo.databinding.ActivityAddLandmarkBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,9 +25,7 @@ class AddLandmarkActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddLandmarkBinding
     private lateinit var viewModel: MapsViewModel
-    private lateinit var repository: LandmarkRepository
-
-    private var landmarkId: Int? = null
+    private var landmarkId: String? = null
     private var selectedImageUri: Uri? = null
 
     private val launcherGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -49,11 +52,8 @@ class AddLandmarkActivity : AppCompatActivity() {
         binding = ActivityAddLandmarkBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val database = AppDatabase.getDatabase(applicationContext)
-        repository = LandmarkRepository(database.landmarkDao())
-
-        val factory = MapsViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[MapsViewModel::class.java]
+        val repository = MapsRepository(ApiConfig.apiService)
+        viewModel = ViewModelProvider(this, MapsViewModelFactory(repository))[MapsViewModel::class.java]
 
         binding.btnGallery.setOnClickListener {
             showImagePicker()
@@ -71,8 +71,8 @@ class AddLandmarkActivity : AppCompatActivity() {
             deleteLandmark()
         }
 
-        landmarkId = intent.getIntExtra("landmark_id", -1)
-        if (landmarkId != -1) {
+        landmarkId = intent.getStringExtra("landmark_id")
+        if (!landmarkId.isNullOrEmpty()) {
             viewModel.getLandmarkById(landmarkId!!).observe(this) { landmark ->
                 landmark?.let {
                     populateFields(it)
@@ -86,41 +86,44 @@ class AddLandmarkActivity : AppCompatActivity() {
         val latitude = binding.editTextLatitude.text.toString().toDoubleOrNull()
         val longitude = binding.editTextLongitude.text.toString().toDoubleOrNull()
         val description = binding.editTextDescription.text.toString()
+        val architecturalFeatures = binding.editTextArchitecturalFeatures.text.toString()
+        val interestingFacts = binding.editTextInterestingFacts.text.toString()
+        val historicalSignificance = binding.editTextHistoricalSignificance.text.toString()
+        val hours = binding.editTextHours.text.toString()
+        val entryFee = binding.editTextEntryFee.text.toString()
         val geofenceRadius = binding.editTextGeofenceRadius.text.toString().toFloatOrNull()
 
         if (name.isNotEmpty() && latitude != null && longitude != null && geofenceRadius != null && selectedImageUri != null) {
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val newId = if (landmarkId == null) {
-                        val lastId = viewModel.getLastLandmarkId()
-                        lastId + 1
-                    } else {
-                        landmarkId!!
-                    }
-
-                    val landmark = Landmark(
-                        id = newId,
+                    val landmarkResponseItem = LandmarkResponseItem(
                         name = name,
-                        latitude = latitude,
-                        longitude = longitude,
-                        image = selectedImageUri.toString(),
-                        description = description,
-                        geofenceRadius = geofenceRadius
+                        coordinates = Coordinates(latitude, longitude),
+                        description = Description(
+                            overview = description,
+                            architecturalFeatures = architecturalFeatures,
+                            interestingFacts = interestingFacts,
+                            historicalSignificance = historicalSignificance,
+                            visitorInformation = VisitorInformation(
+                                hours = hours,
+                                entryFee = entryFee
+                            )
+                        ),
+                        photo = selectedImageUri.toString()
                     )
 
-                    if (landmarkId == null) {
-                        viewModel.insert(landmark)
-                        Log.d("AddLandmarkActivity", "Landmark inserted: $landmark")
+                    val result = viewModel.createLandmark(landmarkResponseItem).value
+
+                    if (result != null) {
+                        Log.d("AddLandmarkActivity", "Landmark created: $result")
                         runOnUiThread {
                             Toast.makeText(this@AddLandmarkActivity, "Landmark added", Toast.LENGTH_SHORT).show()
                             finish()
                         }
                     } else {
-                        viewModel.update(landmark)
-                        Log.d("AddLandmarkActivity", "Landmark updated: $landmark")
+                        Log.e("AddLandmarkActivity", "Error creating landmark")
                         runOnUiThread {
-                            Toast.makeText(this@AddLandmarkActivity, "Landmark updated", Toast.LENGTH_SHORT).show()
-                            finish()
+                            Toast.makeText(this@AddLandmarkActivity, "Error creating landmark", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } catch (e: Exception) {
@@ -135,34 +138,21 @@ class AddLandmarkActivity : AppCompatActivity() {
         }
     }
 
-
     private fun deleteLandmark() {
-        landmarkId?.let { id ->
-            lifecycleScope.launch(Dispatchers.IO) {
-                try {
-                    viewModel.delete(id)
-                    Log.d("AddLandmarkActivity", "Landmark deleted with ID: $id")
-                    runOnUiThread {
-                        Toast.makeText(this@AddLandmarkActivity, "Landmark deleted", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                } catch (e: Exception) {
-                    Log.e("AddLandmarkActivity", "Error deleting landmark", e)
-                    runOnUiThread {
-                        Toast.makeText(this@AddLandmarkActivity, "Error deleting landmark", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
+        // Implement delete functionality if necessary
     }
 
-    private fun populateFields(landmark: Landmark) {
+    private fun populateFields(landmark: LandmarkResponseItem) {
         binding.editTextName.setText(landmark.name)
-        binding.editTextLatitude.setText(landmark.latitude.toString())
-        binding.editTextLongitude.setText(landmark.longitude.toString())
-        binding.editTextDescription.setText(landmark.description)
-        binding.editTextGeofenceRadius.setText(landmark.geofenceRadius.toString())
-        selectedImageUri = Uri.parse(landmark.image)
+        binding.editTextLatitude.setText((landmark.coordinates?.latitude as Double).toString())
+        binding.editTextLongitude.setText((landmark.coordinates.longitude as Double).toString())
+        binding.editTextDescription.setText(landmark.description?.overview)
+        binding.editTextArchitecturalFeatures.setText(landmark.description?.architecturalFeatures)
+        binding.editTextInterestingFacts.setText(landmark.description?.interestingFacts)
+        binding.editTextHistoricalSignificance.setText(landmark.description?.historicalSignificance)
+        binding.editTextHours.setText(landmark.description?.visitorInformation?.hours)
+        binding.editTextEntryFee.setText(landmark.description?.visitorInformation?.entryFee)
+        selectedImageUri = Uri.parse(landmark.photo)
         binding.ivShowImage.setImageURI(selectedImageUri)
     }
 
