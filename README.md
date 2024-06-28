@@ -1,6 +1,6 @@
 # Pemandoo : Explore The Nusantara Raya
 ## GEMASTIK XVII Perangkat Lunak
-### Meet Our Team NAWASENA : 
+### Meet Our Team NAWASENA : GEMASTIK24-910045816 
 
 | No | Name                      | NIM         | Roles          |
 |:--:|:--------------------------|:------------|:---------------|
